@@ -3,8 +3,28 @@
 
 // let paragrafo = document.querySelector('p');
 // paragrafo.innerHTML = 'Escolha um número entre 1 e 10';
+let listaDeNumerosSorteados = [];
+let numeroLimite = 10;
 let numeroSecreto = gerarNumeroAleatorio();
 let tentativas = 1;
+
+function exibirTextoNaTela(tag, texto){
+  let campo = document.querySelector(tag);
+  campo.innerHTML = texto;
+   if ('speechSynthesis' in window) {
+        let utterance = new SpeechSynthesisUtterance(texto);
+        utterance.lang = 'pt-BR'; 
+        utterance.rate = 1; 
+        window.speechSynthesis.speak(utterance); 
+    }
+  }
+  
+  function exibirMensagemInicial() {
+    exibirTextoNaTela('h1', 'Jogo do número secreto' );
+    exibirTextoNaTela('p', 'Escolha um número entre 1 e 10');
+  }
+  
+  exibirMensagemInicial();
 
 function verificarChute() {
     let chute = document.querySelector('input').value
@@ -28,21 +48,21 @@ function verificarChute() {
     }
 }
 
-function exibirTextoNaTela(tag, texto){
-let campo = document.querySelector(tag);
-campo.innerHTML = texto;
-}
-
-function exibirMensagemInicial() {
-  exibirTextoNaTela('h1', 'Jogo do número secreto' );
-  exibirTextoNaTela('p', 'Escolha um número entre 1 e 10');
-}
-
-exibirMensagemInicial();
-
-
 function gerarNumeroAleatorio(){
-  return parseInt(Math.random() * 10 + 1);
+  let numeroEscolhido = parseInt(Math.random() * numeroLimite + 1);
+  let quantidadeDeElementosNaLista = listaDeNumerosSorteados.length;
+
+  if (quantidadeDeElementosNaLista == numeroLimite) {
+    listaDeNumerosSorteados = [];
+  }
+
+  if  (listaDeNumerosSorteados.includes(numeroEscolhido)){
+    return gerarNumeroAleatorio();
+  } else {
+    listaDeNumerosSorteados.push(numeroEscolhido);
+    console.log(listaDeNumerosSorteados);
+    return numeroEscolhido;
+  }
 }
 
 function limparCampo(){
